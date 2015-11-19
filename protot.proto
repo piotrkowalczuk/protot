@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package protot;
+
+
+message NilString {
+    string value = 1;
+    bool valid = 2;
+}
+
+message NilInt64 {
+    int64 value = 1;
+    bool valid = 2;
+}
+
+message NilBool {
+    bool value = 1;
+    bool valid = 2;
+}
+
+message Timestamp {
+    int64 seconds = 1;
+    int32 nanos = 2;
+}
