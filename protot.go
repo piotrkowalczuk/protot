@@ -1,6 +1,12 @@
 package protot
 
-import "time"
+import (
+	"encoding/json"
+	"fmt"
+	"time"
+
+	"github.com/golang/protobuf/proto"
+)
 
 // NilString represents a string that may be nil.
 type NilString struct {
@@ -8,8 +14,16 @@ type NilString struct {
 	Valid  bool   `protobuf:"varint,2,opt,name=valid" json:"valid,omitempty"`
 }
 
+func (m *NilString) Reset() { *m = NilString{} }
+
+//func (m *NilString) String() string { return proto.CompactTextString(m) }
+func (*NilString) ProtoMessage() {}
+
 // StringOr returns given string value if receiver is nil or invalid.
-func (ns NilString) StringOr(or string) string {
+func (ns *NilString) StringOr(or string) string {
+	if ns == nil {
+		return or
+	}
 	if !ns.Valid {
 		return or
 	}
@@ -17,9 +31,26 @@ func (ns NilString) StringOr(or string) string {
 	return ns.String
 }
 
-//func (m *NilString) Reset()         { *m = NilString{} }
-//func (m *NilString) String() string { return proto.CompactTextString(m) }
-//func (*NilString) ProtoMessage()    {}
+// MarshalJSON implements json.Marshaler interface.
+func (ns *NilString) MarshalJSON() ([]byte, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+
+	return json.Marshal(ns.String)
+}
+
+// UnmarshalJSON implements json.Unmarshaler interface.
+func (ns *NilString) UnmarshalJSON(data []byte) error {
+	if data == nil {
+		ns.String, ns.Valid = "", false
+		return nil
+	}
+
+	ns.Valid = true
+
+	return json.Unmarshal(data, &ns.String)
+}
 
 // NilInt64 represents a int64 that may be nil.
 type NilInt64 struct {
@@ -28,7 +59,10 @@ type NilInt64 struct {
 }
 
 // Int64Or returns given int64 value if receiver is nil or invalid.
-func (ni NilInt64) Int64Or(or int64) int64 {
+func (ni *NilInt64) Int64Or(or int64) int64 {
+	if ni == nil {
+		return or
+	}
 	if !ni.Valid {
 		return or
 	}
@@ -36,18 +70,26 @@ func (ni NilInt64) Int64Or(or int64) int64 {
 	return ni.Int64
 }
 
-//func (m *NilInt64) Reset()         { *m = NilInt64{} }
-//func (m *NilInt64) String() string { return proto.CompactTextString(m) }
-//func (*NilInt64) ProtoMessage()    {}
-
 // NilBool represents a bool that may be nil.
 type NilBool struct {
 	Bool  bool `protobuf:"varint,1,opt,name=value" json:"value,omitempty"`
 	Valid bool `protobuf:"varint,2,opt,name=valid" json:"valid,omitempty"`
 }
 
+// Reset implements proto.Message interface.
+func (nb *NilBool) Reset() { *nb = NilBool{} }
+
+// String implements proto.Message interface.
+func (nb *NilBool) String() string { return proto.CompactTextString(nb) }
+
+// ProtoMessage implements proto.Message interface.
+func (*NilBool) ProtoMessage() {}
+
 // BoolOr returns given bool value if receiver is nil or invalid.
-func (nb NilBool) BoolOr(or bool) bool {
+func (nb *NilBool) BoolOr(or bool) bool {
+	if nb == nil {
+		return or
+	}
 	if !nb.Valid {
 		return or
 	}
@@ -55,15 +97,20 @@ func (nb NilBool) BoolOr(or bool) bool {
 	return nb.Bool
 }
 
-//func (m *NilBool) Reset()         { *m = NilBool{} }
-//func (m *NilBool) String() string { return proto.CompactTextString(m) }
-//func (*NilBool) ProtoMessage()    {}
-
 // Timestamp ...
 type Timestamp struct {
 	Seconds int64 `protobuf:"varint,1,opt,name=seconds" json:"seconds,omitempty"`
 	Nanos   int32 `protobuf:"varint,2,opt,name=nanos" json:"nanos,omitempty"`
 }
+
+// Reset implements proto.Message interface.
+func (t *Timestamp) Reset() { *t = Timestamp{} }
+
+// String implements proto.Message interface.
+func (t *Timestamp) String() string { return proto.CompactTextString(t) }
+
+// ProtoMessage implements proto.Message interface.
+func (*Timestamp) ProtoMessage() {}
 
 // Now returns the current time as a protobuf Timestamp.
 func Now() *Timestamp {
@@ -104,6 +151,17 @@ func (t *Timestamp) Less(i *Timestamp, j *Timestamp) bool {
 	return i.Nanos < j.Nanos
 }
 
-//func (m *Timestamp) Reset()         { *m = Timestamp{} }
-//func (m *Timestamp) String() string { return proto.CompactTextString(m) }
-//func (*Timestamp) ProtoMessage()    {}
+// TimestampRange ...
+type TimestampRange struct {
+	From *Timestamp `protobuf:"bytes,1,opt,name=from" json:"from,omitempty"`
+	To   *Timestamp `protobuf:"bytes,2,opt,name=to" json:"to,omitempty"`
+}
+
+// Reset implements proto.Message interface.
+func (tr *TimestampRange) Reset() { *tr = TimestampRange{} }
+
+// String implements proto.Message interface.
+func (tr *TimestampRange) String() string { return proto.CompactTextString(tr) }
+
+// ProtoMessage implements proto.Message interface.
+func (*TimestampRange) ProtoMessage() {}
