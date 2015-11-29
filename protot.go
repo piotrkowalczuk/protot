@@ -2,7 +2,6 @@ package protot
 
 import (
 	"encoding/json"
-	"fmt"
 	"time"
 
 	"github.com/golang/protobuf/proto"
