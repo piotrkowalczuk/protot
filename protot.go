@@ -51,11 +51,35 @@ func (ns *NilString) UnmarshalJSON(data []byte) error {
 	return json.Unmarshal(data, &ns.String)
 }
 
+// CompareString work like NilString but also allow to specify comparison strategy.
+type CompareString struct {
+	NilString
+	Compare string `protobuf:"varint,3,opt,name=compare" json:"compare,omitempty"`
+}
+
+// Reset implements proto.Message interface.
+func (cs *CompareString) Reset() { *cs = CompareString{} }
+
+// String implements proto.Message interface.
+func (cs *CompareString) String() string { return proto.CompactTextString(cs) }
+
+// ProtoMessage implements proto.Message interface.
+func (*CompareString) ProtoMessage() {}
+
 // NilInt64 represents a int64 that may be nil.
 type NilInt64 struct {
 	Int64 int64 `protobuf:"varint,1,opt,name=value" json:"value,omitempty"`
 	Valid bool  `protobuf:"varint,2,opt,name=valid" json:"valid,omitempty"`
 }
+
+// Reset implements proto.Message interface.
+func (ni *NilInt64) Reset() { *ni = NilInt64{} }
+
+// String implements proto.Message interface.
+func (ni *NilInt64) String() string { return proto.CompactTextString(ni) }
+
+// ProtoMessage implements proto.Message interface.
+func (*NilInt64) ProtoMessage() {}
 
 // Int64Or returns given int64 value if receiver is nil or invalid.
 func (ni *NilInt64) Int64Or(or int64) int64 {
@@ -68,6 +92,48 @@ func (ni *NilInt64) Int64Or(or int64) int64 {
 
 	return ni.Int64
 }
+
+// NilFloat64 represents a flaot64 that may be nil.
+type NilFloat64 struct {
+	Float64 float64 `protobuf:"fixed64,1,opt,name=value" json:"value,omitempty"`
+	Valid   bool    `protobuf:"varint,2,opt,name=valid" json:"valid,omitempty"`
+}
+
+// Reset implements proto.Message interface.
+func (nf *NilFloat64) Reset() { *nf = NilFloat64{} }
+
+// String implements proto.Message interface.
+func (nf *NilFloat64) String() string { return proto.CompactTextString(nf) }
+
+// ProtoMessage implements proto.Message interface.
+func (*NilFloat64) ProtoMessage() {}
+
+// Float64Or returns given float64 value if receiver is nil or invalid.
+func (nf *NilFloat64) Float64Or(or float64) float64 {
+	if nf == nil {
+		return or
+	}
+	if !nf.Valid {
+		return or
+	}
+
+	return nf.Float64
+}
+
+// NilFloat64Range ...
+type NilFloat64Range struct {
+	From *NilFloat64 `protobuf:"varint,1,opt,name=from" json:"from,omitempty"`
+	To   *NilFloat64 `protobuf:"varint,2,opt,name=to" json:"to,omitempty"`
+}
+
+// Reset implements proto.Message interface.
+func (nfr *NilFloat64Range) Reset() { *nfr = NilFloat64Range{} }
+
+// String implements proto.Message interface.
+func (nfr *NilFloat64Range) String() string { return proto.CompactTextString(nfr) }
+
+// ProtoMessage implements proto.Message interface.
+func (*NilFloat64Range) ProtoMessage() {}
 
 // NilBool represents a bool that may be nil.
 type NilBool struct {
@@ -134,20 +200,20 @@ func (t *Timestamp) Time() time.Time {
 }
 
 // Less returns true if timestamp is before given one.
-func (t *Timestamp) Less(i *Timestamp, j *Timestamp) bool {
-	if i == nil {
+func (t *Timestamp) Less(t2 *Timestamp) bool {
+	if t == nil {
 		return true
 	}
-	if j == nil {
+	if t2 == nil {
 		return false
 	}
-	if i.Seconds < j.Seconds {
+	if t.Seconds < t2.Seconds {
 		return true
 	}
-	if i.Seconds > j.Seconds {
+	if t.Seconds > t2.Seconds {
 		return false
 	}
-	return i.Nanos < j.Nanos
+	return t.Nanos < t2.Nanos
 }
 
 // TimestampRange ...

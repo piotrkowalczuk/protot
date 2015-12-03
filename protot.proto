@@ -8,9 +8,25 @@ message NilString {
     bool valid = 2;
 }
 
+message CompareString {
+    string value = 1;
+    bool valid = 2;
+    string compare = 3;
+}
+
 message NilInt64 {
     int64 value = 1;
     bool valid = 2;
+}
+
+message NilFloat64 {
+    double value = 1;
+    bool valid = 2;
+}
+
+message NilFloat64Range {
+    NilFloat64 from = 1;
+    NilFloat64 to = 2;
 }
 
 message NilBool {
@@ -21,4 +37,9 @@ message NilBool {
 message Timestamp {
     int64 seconds = 1;
     int32 nanos = 2;
+}
+
+message TimestampRange {
+    Timestamp from = 1;
+    Timestamp to = 2;
 }
