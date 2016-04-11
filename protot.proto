@@ -1,45 +1,62 @@
 syntax = "proto3";
 
 package protot;
+option go_package = "protot";
 
+import "github.com/golang/protobuf/ptypes/timestamp/timestamp.proto";
 
-message NilString {
-    string value = 1;
+enum TextQueryType {
+	NOT_A_TEXT = 0;
+	EXACT = 1;
+	HAS_PREFIX = 2;
+	HAS_SUFFIX = 3;
+	SUBSTRING = 4;
+	PATTERN = 5;
+	MIN_LENGTH = 6;
+	MAX_LENGTH = 7;
+}
+
+// QueryString ...
+message QueryString {
+    repeated string values = 1;
     bool valid = 2;
+	bool negation = 3;
+	TextQueryType type = 4;
 }
 
-message CompareString {
-    string value = 1;
+// NumericQueryType ...
+enum NumericQueryType {
+	NOT_A_NUMBER = 0;
+	EQUAL = 1;
+	NOT_EQUAL = 2;
+	GREATER = 3;
+	GREATER_EQUAL = 4;
+	LESS = 5;
+	LESS_EQUAL = 6;
+	IN = 7;
+	BETWEEN = 8;
+}
+
+// QueryInt64 ...
+message QueryInt64 {
+    repeated int64 values = 1;
     bool valid = 2;
-    string compare = 3;
+    bool negation = 3;
+	NumericQueryType type = 4;
 }
 
-message NilInt64 {
-    int64 value = 1;
+// QueryFloat64 ...
+message QueryFloat64 {
+	repeated double values = 1;
+	bool valid = 2;
+	bool negation = 3;
+	NumericQueryType type = 4;
+}
+
+// QueryTimestamp ...
+message QueryTimestamp {
+    repeated google.protobuf.Timestamp values = 1;
     bool valid = 2;
-}
-
-message NilFloat64 {
-    double value = 1;
-    bool valid = 2;
-}
-
-message NilFloat64Range {
-    NilFloat64 from = 1;
-    NilFloat64 to = 2;
-}
-
-message NilBool {
-    bool value = 1;
-    bool valid = 2;
-}
-
-message Timestamp {
-    int64 seconds = 1;
-    int32 nanos = 2;
-}
-
-message TimestampRange {
-    Timestamp from = 1;
-    Timestamp to = 2;
+	bool negation = 3;
+	NumericQueryType type = 4;
 }
