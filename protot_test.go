@@ -12,11 +12,68 @@ func TestParseString(t *testing.T) {
 		given    string
 		expected QueryString
 	}{
+		"exists": {
+			given: "ex:",
+			expected: QueryString{
+				Values:   []string{""},
+				Type:     TextQueryType_NOT_A_TEXT,
+				Valid:    true,
+				Negation: true,
+			},
+		},
+		"not-exists": {
+			given: "nex:",
+			expected: QueryString{
+				Values: []string{""},
+				Type:   TextQueryType_NOT_A_TEXT,
+				Valid:  true,
+			},
+		},
 		"equal": {
 			given: "eq:123",
 			expected: QueryString{
 				Values: []string{"123"},
 				Type:   TextQueryType_EXACT,
+				Valid:  true,
+			},
+		},
+		"has-prefix": {
+			given: "hp:New",
+			expected: QueryString{
+				Values: []string{"New"},
+				Type:   TextQueryType_HAS_PREFIX,
+				Valid:  true,
+			},
+		},
+		"has-suffix": {
+			given: "hs:New",
+			expected: QueryString{
+				Values: []string{"New"},
+				Type:   TextQueryType_HAS_SUFFIX,
+				Valid:  true,
+			},
+		},
+		"substring": {
+			given: "sub:anything",
+			expected: QueryString{
+				Values: []string{"anything"},
+				Type:   TextQueryType_SUBSTRING,
+				Valid:  true,
+			},
+		},
+		"pattern": {
+			given: "regex:.*",
+			expected: QueryString{
+				Values: []string{".*"},
+				Type:   TextQueryType_PATTERN,
+				Valid:  true,
+			},
+		},
+		"max-length": {
+			given: "maxl:4",
+			expected: QueryString{
+				Values: []string{"4"},
+				Type:   TextQueryType_MAX_LENGTH,
 				Valid:  true,
 			},
 		},
