@@ -273,6 +273,15 @@ func TestParseInt64(t *testing.T) {
 				Valid:  true,
 			},
 		},
+		"not-equal": {
+			given: "neq:123",
+			expected: QueryInt64{
+				Values:   []int64{123},
+				Type:     NumericQueryType_EQUAL,
+				Valid:    true,
+				Negation: true,
+			},
+		},
 		"greater": {
 			given: "gt:555",
 			expected: QueryInt64{
@@ -313,6 +322,15 @@ func TestParseInt64(t *testing.T) {
 				Valid:  true,
 			},
 		},
+		"not-between": {
+			given: "nbw:111,222",
+			expected: QueryInt64{
+				Values:   []int64{111, 222},
+				Type:     NumericQueryType_BETWEEN,
+				Valid:    true,
+				Negation: true,
+			},
+		},
 	}
 
 CasesLoop:
@@ -329,5 +347,15 @@ CasesLoop:
 		if !reflect.DeepEqual(c.expected, *got) {
 			t.Errorf("%s: wrong output,\nexpected:\n	%v\nbut got:\n	%v\n", hint, &c.expected, got)
 		}
+	}
+}
+
+func TestParseInt64_text(t *testing.T) {
+	got, err := ParseInt64("ne:long-text")
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+	if got != nil {
+		t.Fatalf("expected nil")
 	}
 }
