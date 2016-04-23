@@ -68,7 +68,7 @@ var (
 	}
 )
 
-// Value ...
+// Value returns first value or empty string if none.
 func (qs *QueryString) Value() string {
 	if len(qs.Values) == 0 {
 		return ""
@@ -77,7 +77,9 @@ func (qs *QueryString) Value() string {
 	return qs.Values[0]
 }
 
-// ParseString ...
+// ParseString allocates new QueryString object based on given string.
+// If string is prefixed with known operator e.g. 'hp:New'
+// returned object will get same type.
 func ParseString(s string) *QueryString {
 	if s == "" {
 		return &QueryString{}
@@ -208,7 +210,7 @@ func ParseInt64(s string) (*QueryInt64, error) {
 	}, nil
 }
 
-// EqualInt64 ...
+// EqualInt64 allocates valid QueryInt64 object of type equal with given value.
 func EqualInt64(i int64) *QueryInt64 {
 	return &QueryInt64{
 		Values: []int64{i},
@@ -217,7 +219,7 @@ func EqualInt64(i int64) *QueryInt64 {
 	}
 }
 
-// Value ...
+// Value returns first available value or 0 if none available.
 func (qf *QueryFloat64) Value() float64 {
 	if len(qf.Values) == 0 {
 		return 0.0
@@ -235,7 +237,8 @@ func (qt *QueryTimestamp) Value() *pbts.Timestamp {
 	return qt.Values[0]
 }
 
-// BetweenTimestamp ...
+// BetweenTimestamp allocates valid QueryTimestamp object if both timestamps are not nil
+// and first is before the second.
 func BetweenTimestamp(from, to *pbts.Timestamp) *QueryTimestamp {
 	if from == nil || to == nil {
 		return &QueryTimestamp{}
