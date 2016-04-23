@@ -196,6 +196,9 @@ func ParseInt64(s string) (*QueryInt64, error) {
 
 	outgoing := make([]int64, 0, len(incoming))
 	for i, v := range incoming {
+		if v == "" {
+			break
+		}
 		vv, err := strconv.ParseInt(v, 10, 64)
 		if err != nil {
 			return nil, fmt.Errorf("protot: query int64 parsing error for valur %d: %s", i, err.Error())
