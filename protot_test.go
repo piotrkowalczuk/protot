@@ -242,3 +242,92 @@ func TestEqualInt64(t *testing.T) {
 		t.Errorf("expected to be valid")
 	}
 }
+
+func TestParseInt64(t *testing.T) {
+	cases := map[string]struct {
+		given    string
+		expected QueryInt64
+	}{
+		"exists": {
+			given: "ex:",
+			expected: QueryInt64{
+				Values:   []int64{},
+				Type:     NumericQueryType_NOT_A_NUMBER,
+				Valid:    true,
+				Negation: true,
+			},
+		},
+		"not-exists": {
+			given: "nex:",
+			expected: QueryInt64{
+				Values: []int64{},
+				Type:   NumericQueryType_NOT_A_NUMBER,
+				Valid:  true,
+			},
+		},
+		"equal": {
+			given: "eq:123",
+			expected: QueryInt64{
+				Values: []int64{123},
+				Type:   NumericQueryType_EQUAL,
+				Valid:  true,
+			},
+		},
+		"greater": {
+			given: "gt:555",
+			expected: QueryInt64{
+				Values: []int64{555},
+				Type:   NumericQueryType_GREATER,
+				Valid:  true,
+			},
+		},
+		"greater-equal": {
+			given: "gte:666",
+			expected: QueryInt64{
+				Values: []int64{666},
+				Type:   NumericQueryType_GREATER_EQUAL,
+				Valid:  true,
+			},
+		},
+		"lesser": {
+			given: "lt:777",
+			expected: QueryInt64{
+				Values: []int64{777},
+				Type:   NumericQueryType_LESS,
+				Valid:  true,
+			},
+		},
+		"lesser-equal": {
+			given: "lte:888",
+			expected: QueryInt64{
+				Values: []int64{888},
+				Type:   NumericQueryType_LESS_EQUAL,
+				Valid:  true,
+			},
+		},
+		"between": {
+			given: "bw:111,222",
+			expected: QueryInt64{
+				Values: []int64{111, 222},
+				Type:   NumericQueryType_BETWEEN,
+				Valid:  true,
+			},
+		},
+	}
+
+CasesLoop:
+	for hint, c := range cases {
+		got, err := ParseInt64(c.given)
+		if err != nil {
+			t.Errorf("%s: unexpected error: %s", hint, err.Error())
+			continue CasesLoop
+		}
+		if got == nil {
+			t.Errorf("%s: unexpected nil", hint)
+			continue CasesLoop
+		}
+		if !reflect.DeepEqual(c.expected, *got) {
+			t.Errorf("%s: wrong output,\nexpected:\n	%v\nbut got:\n	%v\n", hint, &c.expected, got)
+		}
+	}
+}
