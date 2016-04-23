@@ -260,6 +260,10 @@ func TestParseInt64(t *testing.T) {
 		given    string
 		expected QueryInt64
 	}{
+		"empty": {
+			given:    "",
+			expected: QueryInt64{},
+		},
 		"exists": {
 			given: "ex:",
 			expected: QueryInt64{
