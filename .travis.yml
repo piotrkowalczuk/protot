@@ -8,5 +8,5 @@ before_install:
 install:
   - go get .
 script:
-  - go test
-  - $HOME/gopath/bin/goveralls -repotoken S7Knqu960fkLwIysF9Zi3YdpZeyoKv0TR
+  - go test -covermode=count -coverprofile=profile.cov
+  - $HOME/gopath/bin/goveralls -coverprofile=profile.cov -repotoken S7Knqu960fkLwIysF9Zi3YdpZeyoKv0TR
