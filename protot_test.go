@@ -167,6 +167,18 @@ func TestBetweenTimestamp(t *testing.T) {
 				},
 			},
 		},
+		"after-first-seconds": {
+			from: &timestamp.Timestamp{Seconds: 1, Nanos: 1},
+			to:   &timestamp.Timestamp{Seconds: 1, Nanos: 0},
+			expected: QueryTimestamp{
+				Valid: false,
+				Type:  NumericQueryType_BETWEEN,
+				Values: []*timestamp.Timestamp{
+					&timestamp.Timestamp{Seconds: 1, Nanos: 1},
+					&timestamp.Timestamp{Seconds: 1, Nanos: 0},
+				},
+			},
+		},
 		"nil-arguments": {
 			from:     nil,
 			to:       nil,
