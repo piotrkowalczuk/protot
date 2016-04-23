@@ -191,3 +191,54 @@ func TestBetweenTimestamp(t *testing.T) {
 		}
 	}
 }
+
+func TestQueryInt64_Value(t *testing.T) {
+	cases := map[string]struct {
+		given    QueryInt64
+		expected int64
+	}{
+		"single": {
+			given: QueryInt64{
+				Values: []int64{1},
+				Valid:  true,
+				Type:   NumericQueryType_EQUAL,
+			},
+			expected: 1,
+		},
+		"none": {
+			given: QueryInt64{
+				Valid: true,
+				Type:  NumericQueryType_EQUAL,
+			},
+			expected: 0,
+		},
+		"multiple": {
+			given: QueryInt64{
+				Values: []int64{3, 2, 1},
+				Valid:  true,
+				Type:   NumericQueryType_EQUAL,
+			},
+			expected: 3,
+		},
+	}
+
+	for hint, c := range cases {
+		if c.given.Value() != c.expected {
+			t.Errorf("%s: unexpected value, expected %d but got %d", hint, c.expected, c.given.Value())
+		}
+	}
+}
+
+func TestEqualInt64(t *testing.T) {
+	es := EqualInt64(888)
+
+	if es.Negation {
+		t.Errorf("unexpected negation")
+	}
+	if es.Value() != 888 {
+		t.Errorf("unexpected value")
+	}
+	if !es.Valid {
+		t.Errorf("expected to be valid")
+	}
+}
