@@ -318,6 +318,29 @@ func TestGreaterInt64(t *testing.T) {
 	}
 }
 
+func TestBetweenInt64(t *testing.T) {
+	ei := BetweenInt64(1111, 2222)
+
+	if ei.Negation {
+		t.Errorf("unexpected negation")
+	}
+	if ei.Value() != 1111 {
+		t.Errorf("unexpected value")
+	}
+	if ei.Values[0] != 1111 {
+		t.Errorf("unexpected first value")
+	}
+	if ei.Values[1] != 2222 {
+		t.Errorf("unexpected second value")
+	}
+	if !ei.Valid {
+		t.Errorf("expected to be valid")
+	}
+	if ei.Type != NumericQueryType_BETWEEN {
+		t.Errorf("wrong type, expected %s but got %s", NumericQueryType_BETWEEN, ei.Type)
+	}
+}
+
 func TestParseInt64(t *testing.T) {
 	cases := map[string]struct {
 		given    string
