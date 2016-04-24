@@ -1,3 +1,4 @@
+// Package provides set of types that helps to build complex protobuf messages that can express conditional statements.
 package protot
 
 import (

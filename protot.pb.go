@@ -2,18 +2,6 @@
 // source: protot.proto
 // DO NOT EDIT!
 
-/*
-Package protot is a generated protocol buffer package.
-
-It is generated from these files:
-	protot.proto
-
-It has these top-level messages:
-	QueryString
-	QueryInt64
-	QueryFloat64
-	QueryTimestamp
-*/
 package protot
 
 import proto "github.com/golang/protobuf/proto"
