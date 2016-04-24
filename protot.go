@@ -139,6 +139,42 @@ func ExactString(s string) *QueryString {
 	}
 }
 
+// EqualInt64 allocates valid QueryInt64 object of type equal with given value.
+func EqualInt64(i int64) *QueryInt64 {
+	return &QueryInt64{
+		Values: []int64{i},
+		Valid:  true,
+		Type:   NumericQueryType_EQUAL,
+	}
+}
+
+// BetweenInt64 allocates valid QueryInt64 object of type between with given values.
+func BetweenInt64(a, b int64) *QueryInt64 {
+	return &QueryInt64{
+		Values: []int64{a, b},
+		Valid:  true,
+		Type:   NumericQueryType_BETWEEN,
+	}
+}
+
+// GreaterInt64 allocates valid QueryInt64 object of type greater with given value.
+func GreaterInt64(i int64) *QueryInt64 {
+	return &QueryInt64{
+		Values: []int64{i},
+		Valid:  true,
+		Type:   NumericQueryType_GREATER,
+	}
+}
+
+// LessInt64 allocates valid QueryInt64 object of type less with given value.
+func LessInt64(i int64) *QueryInt64 {
+	return &QueryInt64{
+		Values: []int64{i},
+		Valid:  true,
+		Type:   NumericQueryType_LESS,
+	}
+}
+
 // Value ...
 func (qi *QueryInt64) Value() int64 {
 	if len(qi.Values) == 0 {
@@ -213,10 +249,10 @@ func ParseInt64(s string) (*QueryInt64, error) {
 	}, nil
 }
 
-// EqualInt64 allocates valid QueryInt64 object of type equal with given value.
-func EqualInt64(i int64) *QueryInt64 {
-	return &QueryInt64{
-		Values: []int64{i},
+// EqualFloat64 allocates valid QueryFloat64 object of type equal with given value.
+func EqualFloat64(i float64) *QueryFloat64 {
+	return &QueryFloat64{
+		Values: []float64{i},
 		Valid:  true,
 		Type:   NumericQueryType_EQUAL,
 	}
