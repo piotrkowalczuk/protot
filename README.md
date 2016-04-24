@@ -1,2 +1,2 @@
 # protot [![GoDoc](https://godoc.org/github.com/piotrkowalczuk/protot?status.svg)](http://godoc.org/github.com/piotrkowalczuk/protot)&nbsp;[![Build Status](https://travis-ci.org/piotrkowalczuk/protot.svg)](https://travis-ci.org/piotrkowalczuk/protot)&nbsp;[![Coverage Status](https://coveralls.io/repos/github/piotrkowalczuk/protot/badge.svg?branch=master)](https://coveralls.io/github/piotrkowalczuk/protot?branch=master)
-
+Package provides set of types that helps to build complex protobuf messages that can express conditional statements.
