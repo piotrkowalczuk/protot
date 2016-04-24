@@ -1,11 +1,27 @@
 package protot
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 
 	"github.com/golang/protobuf/ptypes/timestamp"
 )
+
+func Example() {
+	ex := ExactString("text")
+
+	fmt.Println(ex.Valid)
+	fmt.Println(ex.Negation)
+	fmt.Println(ex.Type)
+	fmt.Println(ex.Value())
+
+	// Output:
+	// true
+	// false
+	// EXACT
+	// text
+}
 
 func TestParseString(t *testing.T) {
 	cases := map[string]struct {
