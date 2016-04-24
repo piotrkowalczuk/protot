@@ -9,6 +9,33 @@ import (
 )
 
 func Example() {
+	query := struct {
+		Name  *QueryString
+		Age   *QueryInt64
+		Money *QueryFloat64
+	}{
+		Name:  ParseString("sub:John"),
+		Age:   GreaterInt64(18),
+		Money: EqualFloat64(0.0),
+	}
+
+	fmt.Println(query.Name.Value())
+	fmt.Println(query.Name.Type)
+	fmt.Println(query.Age.Value())
+	fmt.Println(query.Age.Type)
+	fmt.Println(query.Money.Value())
+	fmt.Println(query.Money.Type)
+
+	// Output:
+	// John
+	// SUBSTRING
+	// 18
+	// GREATER
+	// 0
+	// EQUAL
+}
+
+func ExampleExactString() {
 	ex := ExactString("text")
 
 	fmt.Println(ex.Valid)
@@ -258,16 +285,36 @@ func TestQueryInt64_Value(t *testing.T) {
 }
 
 func TestEqualInt64(t *testing.T) {
-	es := EqualInt64(888)
+	ei := EqualInt64(888)
 
-	if es.Negation {
+	if ei.Negation {
 		t.Errorf("unexpected negation")
 	}
-	if es.Value() != 888 {
+	if ei.Value() != 888 {
 		t.Errorf("unexpected value")
 	}
-	if !es.Valid {
+	if !ei.Valid {
 		t.Errorf("expected to be valid")
+	}
+	if ei.Type != NumericQueryType_EQUAL {
+		t.Errorf("wrong type, expected %s but got %s", NumericQueryType_EQUAL, ei.Type)
+	}
+}
+
+func TestGreaterInt64(t *testing.T) {
+	gi := GreaterInt64(999)
+
+	if gi.Negation {
+		t.Errorf("unexpected negation")
+	}
+	if gi.Value() != 999 {
+		t.Errorf("unexpected value")
+	}
+	if !gi.Valid {
+		t.Errorf("expected to be valid")
+	}
+	if gi.Type != NumericQueryType_GREATER {
+		t.Errorf("wrong type, expected %s but got %s", NumericQueryType_GREATER, gi.Type)
 	}
 }
 
