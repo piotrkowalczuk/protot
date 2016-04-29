@@ -140,6 +140,41 @@ func ExactString(s string) *QueryString {
 	}
 }
 
+// HasPrefixString ...
+func HasPrefixString(s string) *QueryString {
+	return &QueryString{
+		Values: []string{s},
+		Valid:  true,
+		Type:   TextQueryType_HAS_PREFIX,
+	}
+}
+
+// HasSuffixString ...
+func HasSuffixString(s string) *QueryString {
+	return &QueryString{
+		Values: []string{s},
+		Valid:  true,
+		Type:   TextQueryType_HAS_SUFFIX,
+	}
+}
+
+// SubString ...
+func SubString(s string) *QueryString {
+	return &QueryString{
+		Values: []string{s},
+		Valid:  true,
+		Type:   TextQueryType_SUBSTRING,
+	}
+}
+
+// NotATextString ...
+func NotATextString() *QueryString {
+	return &QueryString{
+		Valid: true,
+		Type:  TextQueryType_NOT_A_TEXT,
+	}
+}
+
 // EqualInt64 allocates valid QueryInt64 object of type equal with given value.
 func EqualInt64(i int64) *QueryInt64 {
 	return &QueryInt64{
